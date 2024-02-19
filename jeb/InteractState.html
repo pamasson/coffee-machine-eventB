@@ -1,0 +1,91 @@
+<html>
+<head>
+<meta charset='utf-8'>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+<title>InteractState</title>
+<link rel='stylesheet' type='text/css' href='jeb.css'>
+</head>
+<body onload='jeb.ui.initContextPage()'>
+<center><font size='5'>Context: <i>InteractState</i></font></center>
+<table width='100%'><tr>
+<td width='5%'><b>Extends</b>:</td>
+<td>
+</td>
+<td width='15%'><input type='checkbox' id='jeb.ui.CODE_TIP_DISPLAY' onclick='jeb.ui.update(this.id)'> Show code tip </td>
+<td width='5%'><a href='index.html'>Home</a></td>
+</tr></table>
+<table width='100%' cellpadding='3' cellspacing='3'>
+<tr style='background-color:#f0f0f0'>
+<td width='1%'></td>
+<td width='10%' align='center'><b>Set</b></td>
+<td align='center'><b>Value</b></td>
+</tr>
+<tr>
+<td></td>
+<td class='labelDotted'>INTERACTIONS</td>
+<td class='formula' id='$cst.INTERACTIONS'></td>
+</tr>
+</table>
+<table width='100%' cellpadding='3' cellspacing='3'>
+<tr style='background-color:#f0f0f0'>
+<td width='1%'></td>
+<td width='10%' align='center'><b>Constant</b></td>
+<td align='center'><b>Value</b></td>
+</tr>
+<tr>
+<td></td>
+<td class='labelDotted'>inputCash</td>
+<td class='formula' id='$cst.inputCash'></td>
+</tr>
+<tr>
+<td></td>
+<td class='labelDotted'>returnCash</td>
+<td class='formula' id='$cst.returnCash'></td>
+</tr>
+<tr>
+<td></td>
+<td class='labelDotted'>askCoffee</td>
+<td class='formula' id='$cst.askCoffee'></td>
+</tr>
+<tr>
+<td></td>
+<td class='labelDotted'>pourCoffee</td>
+<td class='formula' id='$cst.pourCoffee'></td>
+</tr>
+<tr>
+<td></td>
+<td class='labelDotted'>inactive</td>
+<td class='formula' id='$cst.inactive'></td>
+</tr>
+</table>
+
+<table width='100%' cellpadding='3' cellspacing='3'>
+<tr>
+<td></td>
+<td><input class='middle' type='button' id='jeb.ui.axiomCheckbox' value='Check Axiom' onclick='jeb.scheduler.checkAxioms()'></td>
+<td><input class='middle' type='button' value='Clear Result' onclick='jeb.scheduler.clearAxiomsEvaluation()'></td>
+<td></td>
+</tr>
+<tr style='background-color:#f0f0f0'>
+<td name='axiomCheckbox' width='1%'><input type='checkbox' id='jeb.ui.AXIOMS_CHECKED' onclick='jeb.ui.update(this.id)'></td>
+<td width='10%' align='center'><b>Axiom</b></td>
+<td align='center'><b>Predicate</b></td>
+<td align='center'><b>Value</b></td>
+</tr>
+<tr>
+<td name='axiomCheckbox'><input type='checkbox'></td>
+<td class='labelDotted'>INTERACTIONS</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $axm.a10)' onmouseout='jeb.ui.hideTip(event)'>partition(INTERACTIONS,{inputCash},{returnCash},{askCoffee},{pourCoffee},{inactive})</td>
+<td class='formula' id='$axm.a10' align='center'></td>
+</tr>
+</table>
+
+<div id='jeb.ui.tip' style='background-color:#ffffcc;position:absolute;visibility:hidden;padding:5px'></div>
+<script type='text/javascript' src='fabric.min.js'></script>
+<script type='text/javascript' src='biginteger.js'></script>
+<script type='text/javascript' src='jeb.js'></script>
+<script type='text/javascript' src='set.js'></script>
+<script type='text/javascript' src='InteractState.js'></script>
+<script type='text/javascript' src='jeb_user.js'></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+input[type="button"].large {width:150px}
+input[type="button"].small {width:100px}
+input[type="button"].middle {width:120px}
+input.text {width:60px}
+canvas { border:1px solid #c0c0c0;margin-bottom:5px}
+td.formula {font-family:'Brave Sans Mono';
+			font-size:10pt;
+			max-width:280px;
+			word-wrap: break-word;
+			border-bottom-width:1px;
+			border-bottom-style:dotted}
+td.label   {text-align:right;padding-right:10px}
+td.labelDotted {border-bottom-width:1px;border-bottom-style:dotted;text-align:left;}
+td.bottomDotted {border-bottom-width:1px;border-bottom-style:dotted}

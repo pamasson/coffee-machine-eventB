@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+<title>Distributeur1</title>
+<link rel='stylesheet' type='text/css' href='jeb.css'>
+</head>
+<body onload='jeb.ui.initMachinePage()'>
+<div style='position:relative'><center><span style='position:relative' id='zoneanimation'><canvas id='jeb.ui.animator' style='display:none'></canvas></span></center></div>
+<table width='100%' style='background-color:#f0f0f0;'>
+<tr>
+<td>
+<input type='checkbox' id='jeb.ui.CODE_TIP_DISPLAY' onclick='jeb.ui.update(this.id)'> <label for='jeb.ui.CODE_TIP_DISPLAY'>Show code tip</label> |
+<input type='checkbox' id='jeb.ui.PARAMETERS_DISPLAY' onclick='jeb.ui.update(this.id)'> <label for='jeb.ui.PARAMETERS_DISPLAY'>Show parameters</label> |
+<input type='checkbox' id='jeb.ui.GUARDS_DISPLAY' onclick='jeb.ui.update(this.id)'> <label for='jeb.ui.GUARDS_DISPLAY'>Show guards</label> |
+<input type='checkbox' id='jeb.ui.ACTIONS_DISPLAY' onclick='jeb.ui.update(this.id)'> <label for='jeb.ui.ACTIONS_DISPLAY'>Show actions</label> |
+<input type='checkbox' id='jeb.ui.SCENARIO_ENABLED' onclick='jeb.ui.update(this.id)'> <label for='jeb.ui.SCENARIO_ENABLED'>Enable scenario</label> |
+<input type='checkbox' id='jeb.ui.PROBABILITY_ENABLED' onclick='jeb.ui.update(this.id)'> <label for='jeb.ui.PROBABILITY_ENABLED'>Enable Probability</label> |
+Timer interval: <input type='text' style='width:60px' id='jeb.ui.TIMER_INTERVAL' value='100' onblur='jeb.ui.update(this.id)' onkeypress='event.keyCode==13&&jeb.ui.update(this.id)'> |
+Max try arguments: <input type='text' style='width:60px' id='jeb.ui.MAX_TRY_ARGUMENTS' value='10' onblur='jeb.ui.update(this.id)'  onkeypress='event.keyCode==13&&jeb.ui.update(this.id)'>
+</td>
+<td><a href='index.html'>Home</a>
+</td>
+</tr>
+</table>
+<table border='0' width='100%'>
+<tr>
+<td width='30%' valign='top'>
+<table width='100%' cellpadding='3' cellspacing='3'>
+<tr style='background-color:#f0f0f0'>
+<td name='variableCheckbox' style='display:none' width='1%'><input type='checkbox' id='jeb.ui.VARIABLES_CHECKED' onclick='jeb.ui.update(this.id)'></td>
+<td width='10%' align='center'><b>Variable</b></td>
+<td align='center'><b>Value</b></td>
+</tr><tr>
+<td name='variableCheckbox' style='display:none'><input type='checkbox'></td>
+<td class='labelDotted'>Status</td>
+<td class='formula'><div id='$var.Status'></div></td>
+</tr>
+<tr>
+<td name='variableCheckbox' style='display:none'><input type='checkbox'></td>
+<td class='labelDotted'>Pot</td>
+<td class='formula'><div id='$var.Pot'></div></td>
+</tr>
+<tr>
+<td name='variableCheckbox' style='display:none'><input type='checkbox'></td>
+<td class='labelDotted'>CofLeft</td>
+<td class='formula'><div id='$var.CofLeft'></div></td>
+</tr>
+<tr>
+<td name='variableCheckbox' style='display:none'><input type='checkbox'></td>
+<td class='labelDotted'>MoneyBack</td>
+<td class='formula'><div id='$var.MoneyBack'></div></td>
+</tr>
+<tr>
+<td name='variableCheckbox' style='display:none'></td>
+<td align='center'><input class='small' type='button' id='jeb.ui.variableCheckbox' value='Filter' onclick='jeb.ui.filter(this.id)'></td>
+<td></td>
+</tr>
+</table>
+
+<br>
+<table width='100%' cellpadding='3' cellspacing='3'>
+<tr style='background-color:#f0f0f0'>
+<td name='invariantCheckbox' style='display:none' width='1%'><input type='checkbox' id='jeb.ui.INVARIANTS_CHECKED' onclick='jeb.ui.update(this.id)'></td>
+<td width='10%' align='center'><b>Invariant</b></td>
+<td align='center'><b>Predicate</b></td>
+<td align='center'><b>Value</b></td>
+</tr>
+<tr>
+<td name='invariantCheckbox' style='display:none'><input type='checkbox'></td>
+<td class='labelDotted'><b><i>Distributeur</i></b></td>
+<td class='bottomDotted'></td>
+<td class='bottomDotted'></td>
+</tr>
+<tr>
+<td name='invariantCheckbox' style='display:none'><input type='checkbox'></td>
+<td class='labelDotted'>statusType</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $inv.i1)' onmouseout='jeb.ui.hideTip(event)'>Status∈STATUS</td>
+<td class='formula' id='$inv.i1' align='center'></td>
+</tr>
+<tr>
+<td name='invariantCheckbox' style='display:none'><input type='checkbox'></td>
+<td class='labelDotted'><b><i>Distributeur1</i></b></td>
+<td class='bottomDotted'></td>
+<td class='bottomDotted'></td>
+</tr>
+<tr>
+<td name='invariantCheckbox' style='display:none'><input type='checkbox'></td>
+<td class='labelDotted'>Pottype</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $inv.i2)' onmouseout='jeb.ui.hideTip(event)'>Pot∈0 ‥ MAX_POT</td>
+<td class='formula' id='$inv.i2' align='center'></td>
+</tr>
+<tr>
+<td name='invariantCheckbox' style='display:none'><input type='checkbox'></td>
+<td class='labelDotted'>CofLeftType</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $inv.i3)' onmouseout='jeb.ui.hideTip(event)'>CofLeft∈0 ‥ MAX_COF</td>
+<td class='formula' id='$inv.i3' align='center'></td>
+</tr>
+<tr>
+<td name='invariantCheckbox' style='display:none'><input type='checkbox'></td>
+<td class='labelDotted'>MoneyBackType</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $inv.i4)' onmouseout='jeb.ui.hideTip(event)'>MoneyBack∈ℕ</td>
+<td class='formula' id='$inv.i4' align='center'></td>
+</tr>
+<tr>
+<td name='invariantCheckbox' style='display:none'></td>
+<td align='center'><input class='small' type='button' id='jeb.ui.invariantCheckbox' value='Filter' onclick='jeb.ui.filter(this.id)'></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+</td>
+<td width='55%' valign='top'>
+<table border='0' width='100%'>
+<tr>
+<td width='10%'></td>
+<td><input class='middle' type='button' id='jeb.scheduler.testAllGuards' value='Test All Guards' onclick='jeb.scheduler.testAllGuards()'>
+<input class='small' type='button' id='jeb.scheduler.autoRun' value='Auto Run' onclick='jeb.scheduler.autoRun()'>
+<input class='small' type='button' id='jeb.scheduler.stop' value='Stop' onclick='jeb.scheduler.stop()'></td>
+<td width='10%'></td>
+</tr>
+<tr>
+<td><input class='large' id='$evt.init' type='button' value='INITIALISATION' onclick='jeb.scheduler.init()'></td>
+<td>
+<input type='checkbox' disabled id='$evt.init.parameter' name='parameterCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.init.parameter'>Parameters</label> |
+<input type='checkbox' disabled id='$evt.init.guard' name='guardCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.init.guard'>Guards</label> |
+<input type='checkbox'  id='$evt.init.action' name='actionCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.init.action'>Actions</label> 
+<label name='probability' > | <input class='text' id='$evt.init.probability.input' value = '1' onkeypress='$evt.init.probability=parseFloat(this.value)' onblur='$evt.init.probability=parseFloat(this.value)'> Probability </label>
+<!--TODO ADD PROBA HERE-->
+</td>
+<td></td>
+</tr>
+<tr eventId='$evt.init' name='action'>
+<td class='label'>off :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.init.action.a1)' onmouseout='jeb.ui.hideTip(event)'>Status ≔ off</td>
+<td id='$evt.init.action.a1' align='center'></td>
+</tr>
+<tr eventId='$evt.init' name='action'>
+<td class='label'>pot :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.init.action.a2)' onmouseout='jeb.ui.hideTip(event)'>Pot ≔ CoffeePrice</td>
+<td id='$evt.init.action.a2' align='center'></td>
+</tr>
+<tr eventId='$evt.init' name='action'>
+<td class='label'>MoneyBack :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.init.action.a3)' onmouseout='jeb.ui.hideTip(event)'>MoneyBack ≔ 0</td>
+<td id='$evt.init.action.a3' align='center'></td>
+</tr>
+<tr eventId='$evt.init' name='action'>
+<td class='label'>Cleft :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.init.action.a4)' onmouseout='jeb.ui.hideTip(event)'>CofLeft ≔ 0</td>
+<td id='$evt.init.action.a4' align='center'></td>
+</tr>
+<tr>
+<td><input class='large' id='$evt.e1' type='button' value='SwitchOffAuto' onclick='jeb.scheduler.onEventClick($evt.e1)'></td>
+<td>
+<input type='checkbox' disabled id='$evt.e1.parameter' name='parameterCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e1.parameter'>Parameters</label> |
+<input type='checkbox'  id='$evt.e1.guard' name='guardCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e1.guard'>Guards</label> |
+<input type='checkbox'  id='$evt.e1.action' name='actionCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e1.action'>Actions</label> 
+<label name='probability' > | <input class='text' id='$evt.e1.probability.input' value = '1' onkeypress='$evt.e1.probability=parseFloat(this.value)' onblur='$evt.e1.probability=parseFloat(this.value)'> Probability </label>
+<!--TODO ADD PROBA HERE-->
+</td>
+<td></td>
+</tr>
+<tr eventId='$evt.e1' name='guard'>
+<td class='label'>marche :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e1.guard.g1)' onmouseout='jeb.ui.hideTip(event)'>Status=on</td>
+<td id='$evt.e1.guard.g1' class='formula'></td>
+</tr>
+<tr eventId='$evt.e1' name='guard'>
+<td class='label'>NoMoreCoffeePotFull :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e1.guard.g2)' onmouseout='jeb.ui.hideTip(event)'>Pot=MAX_POT∨CofLeft=0</td>
+<td id='$evt.e1.guard.g2' class='formula'></td>
+</tr>
+<tr eventId='$evt.e1' name='action'>
+<td class='label'>switchOff :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e1.action.a1)' onmouseout='jeb.ui.hideTip(event)'>Status ≔ off</td>
+<td id='$evt.e1.action.a1' align='center'></td>
+</tr>
+<tr>
+<td><input class='large' id='$evt.e2' type='button' value='SwitchOffForced' onclick='jeb.scheduler.onEventClick($evt.e2)'></td>
+<td>
+<input type='checkbox' disabled id='$evt.e2.parameter' name='parameterCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e2.parameter'>Parameters</label> |
+<input type='checkbox'  id='$evt.e2.guard' name='guardCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e2.guard'>Guards</label> |
+<input type='checkbox'  id='$evt.e2.action' name='actionCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e2.action'>Actions</label> 
+<label name='probability' > | <input class='text' id='$evt.e2.probability.input' value = '1' onkeypress='$evt.e2.probability=parseFloat(this.value)' onblur='$evt.e2.probability=parseFloat(this.value)'> Probability </label>
+<!--TODO ADD PROBA HERE-->
+</td>
+<td></td>
+</tr>
+<tr eventId='$evt.e2' name='guard'>
+<td class='label'>marche :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e2.guard.g1)' onmouseout='jeb.ui.hideTip(event)'>Status=on</td>
+<td id='$evt.e2.guard.g1' class='formula'></td>
+</tr>
+<tr eventId='$evt.e2' name='action'>
+<td class='label'>switchOff :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e2.action.a1)' onmouseout='jeb.ui.hideTip(event)'>Status ≔ off</td>
+<td id='$evt.e2.action.a1' align='center'></td>
+</tr>
+<tr>
+<td><input class='large' id='$evt.e3' type='button' value='Erreur' onclick='jeb.scheduler.onEventClick($evt.e3)'></td>
+<td>
+<input type='checkbox' disabled id='$evt.e3.parameter' name='parameterCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e3.parameter'>Parameters</label> |
+<input type='checkbox'  id='$evt.e3.guard' name='guardCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e3.guard'>Guards</label> |
+<input type='checkbox'  id='$evt.e3.action' name='actionCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e3.action'>Actions</label> 
+<label name='probability' > | <input class='text' id='$evt.e3.probability.input' value = '1' onkeypress='$evt.e3.probability=parseFloat(this.value)' onblur='$evt.e3.probability=parseFloat(this.value)'> Probability </label>
+<!--TODO ADD PROBA HERE-->
+</td>
+<td></td>
+</tr>
+<tr eventId='$evt.e3' name='guard'>
+<td class='label'>marche :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e3.guard.g1)' onmouseout='jeb.ui.hideTip(event)'>Status=on</td>
+<td id='$evt.e3.guard.g1' class='formula'></td>
+</tr>
+<tr eventId='$evt.e3' name='action'>
+<td class='label'>oups :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e3.action.a1)' onmouseout='jeb.ui.hideTip(event)'>Status ≔ error</td>
+<td id='$evt.e3.action.a1' align='center'></td>
+</tr>
+<tr>
+<td><input class='large' id='$evt.e4' type='button' value='SwitchOn' onclick='jeb.scheduler.onEventClick($evt.e4)'></td>
+<td>
+<input type='checkbox' disabled id='$evt.e4.parameter' name='parameterCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e4.parameter'>Parameters</label> |
+<input type='checkbox'  id='$evt.e4.guard' name='guardCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e4.guard'>Guards</label> |
+<input type='checkbox'  id='$evt.e4.action' name='actionCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e4.action'>Actions</label> 
+<label name='probability' > | <input class='text' id='$evt.e4.probability.input' value = '1' onkeypress='$evt.e4.probability=parseFloat(this.value)' onblur='$evt.e4.probability=parseFloat(this.value)'> Probability </label>
+<!--TODO ADD PROBA HERE-->
+</td>
+<td></td>
+</tr>
+<tr eventId='$evt.e4' name='guard'>
+<td class='label'>off :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e4.guard.g1)' onmouseout='jeb.ui.hideTip(event)'>Status=off</td>
+<td id='$evt.e4.guard.g1' class='formula'></td>
+</tr>
+<tr eventId='$evt.e4' name='guard'>
+<td class='label'>CoffeeAvailable :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e4.guard.g2)' onmouseout='jeb.ui.hideTip(event)'>CofLeft≠0</td>
+<td id='$evt.e4.guard.g2' class='formula'></td>
+</tr>
+<tr eventId='$evt.e4' name='action'>
+<td class='label'>on :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e4.action.a1)' onmouseout='jeb.ui.hideTip(event)'>Status ≔ on</td>
+<td id='$evt.e4.action.a1' align='center'></td>
+</tr>
+<tr>
+<td><input class='large' id='$evt.e5' type='button' value='CashMoney' onclick='jeb.scheduler.onEventClick($evt.e5)'></td>
+<td>
+<input type='checkbox'  id='$evt.e5.parameter' name='parameterCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e5.parameter'>Parameters</label> |
+<input type='checkbox'  id='$evt.e5.guard' name='guardCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e5.guard'>Guards</label> |
+<input type='checkbox'  id='$evt.e5.action' name='actionCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e5.action'>Actions</label> 
+<label name='probability' > | <input class='text' id='$evt.e5.probability.input' value = '1' onkeypress='$evt.e5.probability=parseFloat(this.value)' onblur='$evt.e5.probability=parseFloat(this.value)'> Probability </label>
+<!--TODO ADD PROBA HERE-->
+</td>
+<td></td>
+</tr>
+<tr eventId='$evt.e5' name='parameter'>
+<td class='label'>s :</td>
+<td><input type='text' id='$evt.e5.parameter.s.input' style='width:100%' value = 'get_s($evt.e5)' onblur='$evt.e5.testGuards()'  onkeypress='event.keyCode==13&&$evt.e5.testGuards()'></td>
+<td id='$evt.e5.parameter.s' class='formula'></td>
+</tr>
+<tr eventId='$evt.e5' name='guard'>
+<td class='label'>on :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e5.guard.g1)' onmouseout='jeb.ui.hideTip(event)'>Status=on</td>
+<td id='$evt.e5.guard.g1' class='formula'></td>
+</tr>
+<tr eventId='$evt.e5' name='guard'>
+<td class='label'>positif :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e5.guard.g2)' onmouseout='jeb.ui.hideTip(event)'>s&gt;0</td>
+<td id='$evt.e5.guard.g2' class='formula'></td>
+</tr>
+<tr eventId='$evt.e5' name='guard'>
+<td class='label'>money :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e5.guard.g3)' onmouseout='jeb.ui.hideTip(event)'>∃n·n∈1 ‥ 10∧s=n∗CoffeePrice</td>
+<td id='$evt.e5.guard.g3' class='formula'></td>
+</tr>
+<tr eventId='$evt.e5' name='guard'>
+<td class='label'>MoneyAcceptable :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e5.guard.g4)' onmouseout='jeb.ui.hideTip(event)'>s≤MAX_POT − Pot</td>
+<td id='$evt.e5.guard.g4' class='formula'></td>
+</tr>
+<tr eventId='$evt.e5' name='guard'>
+<td class='label'>CaffeeAvailable :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e5.guard.g5)' onmouseout='jeb.ui.hideTip(event)'>CofLeft≠0</td>
+<td id='$evt.e5.guard.g5' class='formula'></td>
+</tr>
+<tr eventId='$evt.e5' name='action'>
+<td class='label'>adPot :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e5.action.a1)' onmouseout='jeb.ui.hideTip(event)'>Pot ≔ Pot+s</td>
+<td id='$evt.e5.action.a1' align='center'></td>
+</tr>
+<tr eventId='$evt.e5' name='action'>
+<td class='label'>moneyBack :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e5.action.a2)' onmouseout='jeb.ui.hideTip(event)'>MoneyBack ≔ s − CoffeePrice</td>
+<td id='$evt.e5.action.a2' align='center'></td>
+</tr>
+<tr>
+<td><input class='large' id='$evt.e6' type='button' value='PourCoffee' onclick='jeb.scheduler.onEventClick($evt.e6)'></td>
+<td>
+<input type='checkbox' disabled id='$evt.e6.parameter' name='parameterCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e6.parameter'>Parameters</label> |
+<input type='checkbox'  id='$evt.e6.guard' name='guardCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e6.guard'>Guards</label> |
+<input type='checkbox'  id='$evt.e6.action' name='actionCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e6.action'>Actions</label> 
+<label name='probability' > | <input class='text' id='$evt.e6.probability.input' value = '1' onkeypress='$evt.e6.probability=parseFloat(this.value)' onblur='$evt.e6.probability=parseFloat(this.value)'> Probability </label>
+<!--TODO ADD PROBA HERE-->
+</td>
+<td></td>
+</tr>
+<tr eventId='$evt.e6' name='guard'>
+<td class='label'>on :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e6.guard.g1)' onmouseout='jeb.ui.hideTip(event)'>Status=on</td>
+<td id='$evt.e6.guard.g1' class='formula'></td>
+</tr>
+<tr eventId='$evt.e6' name='guard'>
+<td class='label'>stillCoffee :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e6.guard.g2)' onmouseout='jeb.ui.hideTip(event)'>CofLeft≠0</td>
+<td id='$evt.e6.guard.g2' class='formula'></td>
+</tr>
+<tr eventId='$evt.e6' name='action'>
+<td class='label'>CofLeft :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e6.action.a1)' onmouseout='jeb.ui.hideTip(event)'>CofLeft ≔ CofLeft − 1</td>
+<td id='$evt.e6.action.a1' align='center'></td>
+</tr>
+<tr>
+<td><input class='large' id='$evt.e7' type='button' value='AddCof' onclick='jeb.scheduler.onEventClick($evt.e7)'></td>
+<td>
+<input type='checkbox'  id='$evt.e7.parameter' name='parameterCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e7.parameter'>Parameters</label> |
+<input type='checkbox'  id='$evt.e7.guard' name='guardCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e7.guard'>Guards</label> |
+<input type='checkbox'  id='$evt.e7.action' name='actionCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e7.action'>Actions</label> 
+<label name='probability' > | <input class='text' id='$evt.e7.probability.input' value = '1' onkeypress='$evt.e7.probability=parseFloat(this.value)' onblur='$evt.e7.probability=parseFloat(this.value)'> Probability </label>
+<!--TODO ADD PROBA HERE-->
+</td>
+<td></td>
+</tr>
+<tr eventId='$evt.e7' name='parameter'>
+<td class='label'>c :</td>
+<td><input type='text' id='$evt.e7.parameter.c.input' style='width:100%' value = 'get_c($evt.e7)' onblur='$evt.e7.testGuards()'  onkeypress='event.keyCode==13&&$evt.e7.testGuards()'></td>
+<td id='$evt.e7.parameter.c' class='formula'></td>
+</tr>
+<tr eventId='$evt.e7' name='guard'>
+<td class='label'>off :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e7.guard.g1)' onmouseout='jeb.ui.hideTip(event)'>Status=off</td>
+<td id='$evt.e7.guard.g1' class='formula'></td>
+</tr>
+<tr eventId='$evt.e7' name='guard'>
+<td class='label'>cquantity :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e7.guard.g2)' onmouseout='jeb.ui.hideTip(event)'>c∈1 ‥ MAX_COF − CofLeft</td>
+<td id='$evt.e7.guard.g2' class='formula'></td>
+</tr>
+<tr eventId='$evt.e7' name='action'>
+<td class='label'>remplit :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e7.action.a1)' onmouseout='jeb.ui.hideTip(event)'>CofLeft ≔ CofLeft+c</td>
+<td id='$evt.e7.action.a1' align='center'></td>
+</tr>
+<tr>
+<td><input class='large' id='$evt.e8' type='button' value='takePot' onclick='jeb.scheduler.onEventClick($evt.e8)'></td>
+<td>
+<input type='checkbox' disabled id='$evt.e8.parameter' name='parameterCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e8.parameter'>Parameters</label> |
+<input type='checkbox'  id='$evt.e8.guard' name='guardCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e8.guard'>Guards</label> |
+<input type='checkbox'  id='$evt.e8.action' name='actionCheckbox' onclick='jeb.ui.updateEvent(this.id)'> <label for='$evt.e8.action'>Actions</label> 
+<label name='probability' > | <input class='text' id='$evt.e8.probability.input' value = '1' onkeypress='$evt.e8.probability=parseFloat(this.value)' onblur='$evt.e8.probability=parseFloat(this.value)'> Probability </label>
+<!--TODO ADD PROBA HERE-->
+</td>
+<td></td>
+</tr>
+<tr eventId='$evt.e8' name='guard'>
+<td class='label'>off :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e8.guard.g1)' onmouseout='jeb.ui.hideTip(event)'>Status=off</td>
+<td id='$evt.e8.guard.g1' class='formula'></td>
+</tr>
+<tr eventId='$evt.e8' name='guard'>
+<td class='label'>moneyToGet :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e8.guard.g2)' onmouseout='jeb.ui.hideTip(event)'>Pot≥CoffeePrice</td>
+<td id='$evt.e8.guard.g2' class='formula'></td>
+</tr>
+<tr eventId='$evt.e8' name='action'>
+<td class='label'>getIt :</td>
+<td class='formula' onmouseover='jeb.ui.showTip(event, $evt.e8.action.a1)' onmouseout='jeb.ui.hideTip(event)'>Pot ≔ CoffeePrice</td>
+<td id='$evt.e8.action.a1' align='center'></td>
+</tr>
+</table>
+
+</td>
+<td valign='top'>
+<table width='100%' cellpadding='0' cellspacing='0'>
+<tr>
+<td align='center' style='background-color:#f0f0f0;height:25px'><b>Scenario</b></td>
+</tr>
+<tr>
+<td valign='top'>
+<div id='jeb.ui.console' style='height:450px;overflow:auto;background-color:#f7f7f7'></div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<hr>
+Seen contexts : 
+&nbsp;<a href='Constantes.html'>Constantes</a> 
+<div id='jeb.ui.tip' style='background-color:#ffffcc;position:absolute;visibility:hidden;padding:5px'></div>
+<script type='text/javascript' src='fabric.min.js'></script>
+<script type='text/javascript' src='biginteger.js'></script>
+<script type='text/javascript' src='jeb.js'></script>
+<script type='text/javascript' src='set.js'></script>
+<script type='text/javascript' src='Constantes.js'></script>
+<script type='text/javascript' src='Distributeur1.js'></script>
+<script type='text/javascript' src='jeb_user.js'></script>
+<script type='text/javascript' src='Distributeur1_user.js'></script>
+</body>
+</html>
