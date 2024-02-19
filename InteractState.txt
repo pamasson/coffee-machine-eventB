@@ -1,0 +1,9 @@
+context InteractState
+
+sets INTERACTIONS 
+
+constants inputCash returnCash askCoffee pourCoffee inactive goingOff 
+
+axioms
+  @INTERACTIONS partition(INTERACTIONS, {inputCash}, {returnCash}, {askCoffee}, {pourCoffee}, {inactive}, {goingOff})
+end

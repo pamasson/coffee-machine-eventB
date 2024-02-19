@@ -1,0 +1,47 @@
+machine Distributeur sees Constantes 
+
+variables Status 
+
+invariants
+  @statusType Status ∈ STATUS
+
+events
+  event INITIALISATION
+    then
+      @off Status ≔  off
+  end
+
+  event SwitchOff
+    where
+      @marche Status = on
+    then
+      @switchOff Status ≔ off
+  end
+
+  event Error
+    where
+      @marche Status = on
+    then
+      @oups Status ≔ error
+  end
+
+  event SwitchOn
+    where
+      @off Status = off ∨ Status = error
+    then
+      @on Status ≔ on
+  end
+
+  event CashMoney
+    any s 
+    where
+      @on Status = on
+      @positive s >0
+      @money ∃n·n∈1‥5 ∧ s = n∗CoffeePrice
+  end
+
+  event PourCoffee
+    where
+      @on Status = on
+  end
+end

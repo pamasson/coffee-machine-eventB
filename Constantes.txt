@@ -1,0 +1,17 @@
+context Constantes
+
+sets STATUS 
+
+constants MAX_BAL MAX_POT MAX_COF on off error CoffeePrice 
+
+axioms
+  @COF_type MAX_COF ∈ ℕ1
+  @BAL_type MAX_BAL ∈  ℕ1
+  @POT_type MAX_POT ∈ ℕ1
+  @STATUS_def partition(STATUS, {on}, {off}, {error})
+  @CoffeePrice CoffeePrice ∈ ℕ1
+  @CoffeePrice50 ∃n·n∈1‥10 ⇒ CoffeePrice = n∗50
+  @CoffeePriceValue CoffeePrice = 50
+  @PotMax MAX_POT ≥ CoffeePrice∗MAX_COF
+  @MaxBal MAX_BAL = 5∗CoffeePrice
+end

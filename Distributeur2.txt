@@ -1,0 +1,129 @@
+machine Distributeur2 refines Distributeur1  sees Constantes InteractState 
+
+variables Status Pot CofLeft interaction Balance 
+
+invariants
+  @interactionState interaction ∈ INTERACTIONS
+  @moneyEntree Balance ∈ 0‥MAX_BAL
+
+events
+  event INITIALISATION
+    then
+      @off Status ≔  off
+      @pot Pot ≔ CoffeePrice
+      @Cleft CofLeft ≔ 0
+      @interaction interaction ≔ inactive
+      @initBal Balance ≔ 0
+  end
+
+  event SwitchOff extends SwitchOff 
+    where
+      @interactionChange interaction = goingOff
+      @BalanceNulle Balance = 0
+    then
+      @interaction interaction ≔ inactive
+  end
+
+  event ErrorAuto extends ErrorAuto 
+    where
+      @NoMoreMoney Balance = 0
+  end
+
+  event PressSwitchOff
+    where
+      @idle interaction = inputCash
+      @status Status = on
+    then
+      @returnMoney interaction ≔ goingOff
+  end
+
+  event Error extends ErrorForced 
+  end
+
+  event SwitchOn extends SwitchOn 
+    then
+      @interaction interaction ≔ inputCash
+  end
+
+  event PressReturn
+    where
+      @interaction interaction = inputCash
+      @modeOn Status = on
+    then
+      @giveBackMoneyr interaction ≔ returnCash
+  end
+
+  event backBalance
+    where
+      @status Status = on
+      @giveBack interaction = returnCash
+    then
+      @balanceNulle Balance ≔0
+      @interaction interaction ≔ inputCash
+  end
+
+  event backBalanceGoingOff
+    where
+      @status Status = on
+      @giveBack interaction = goingOff
+      @somethinToReturn Balance ≠ 0
+    then
+      @balanceNulle Balance ≔0
+  end
+
+  event PressCoffee
+    where
+      @moneyIn interaction = inputCash
+      @enoughMoney Balance ≥ CoffeePrice
+      @CoffeeAvailable CofLeft ≠  0
+    then
+      @pour interaction ≔ askCoffee
+  end
+
+  event insertP1
+    where
+      @interaction interaction = inputCash
+      @status Status = on
+      @notMax Balance ≤ MAX_BAL − CoffeePrice
+    then
+      @Balance Balance ≔ Balance + CoffeePrice
+  end
+
+  event insertP2
+    where
+      @interaction interaction = inputCash
+      @status Status = on
+      @notMax Balance ≤ MAX_BAL − 2∗CoffeePrice
+    then
+      @Balance Balance ≔ Balance + 2∗CoffeePrice
+  end
+
+  event CashMoney refines CashMoney 
+    where
+      @on Status = on
+      @MoneyAcceptable CoffeePrice ≤ MAX_POT − Pot
+      @CaffeeAvailable CofLeft ≠ 0
+      @cafeOk interaction = askCoffee
+      @MoneyAvailable ∃i·i∈1‥5 ∧ Balance=CoffeePrice∗i
+    with
+      @s s = Balance
+      @MoneyBack' MoneyBack' = Balance − CoffeePrice
+    then
+      @adPot Pot ≔ Pot + CoffeePrice
+      @goPour interaction ≔ pourCoffee
+      @Balancedon Balance ≔  Balance − CoffeePrice
+  end
+
+  event PourCoffee extends PourCoffee 
+    where
+      @pouring interaction = pourCoffee
+    then
+      @interaction interaction ≔ inputCash
+  end
+
+  event AddCof extends AddCof 
+  end
+
+  event takePot extends takePot 
+  end
+end

@@ -1,0 +1,66 @@
+machine Distributeur1 refines Distributeur  sees Constantes 
+
+variables Status Pot CofLeft MoneyBack 
+
+invariants
+  @Pottype Pot ∈ 0‥MAX_POT
+  @CofLeftType CofLeft ∈ 0‥MAX_COF
+  @MoneyBackType MoneyBack ∈ ℕ
+
+events
+  event INITIALISATION extends INITIALISATION 
+    then
+      @pot Pot ≔ CoffeePrice
+      @MoneyBack MoneyBack ≔ 0
+      @Cleft CofLeft ≔ 0
+  end
+
+  event SwitchOff extends SwitchOff 
+  end
+
+  event ErrorAuto extends Error 
+    where
+      @NoMoreCoffeePotFull Pot = MAX_POT ∨  CofLeft = 0
+  end
+
+  event ErrorForced extends Error 
+  end
+
+  event SwitchOn extends SwitchOn 
+    where
+      @CoffeeAvailable CofLeft ≠ 0
+  end
+
+  event CashMoney extends CashMoney 
+    where
+      @MoneyAcceptable CoffeePrice ≤ MAX_POT − Pot
+      @CaffeeAvailable CofLeft ≠ 0
+    then
+      @adPot Pot ≔ Pot + CoffeePrice
+      @moneyBack MoneyBack :∣ MoneyBack' = s − CoffeePrice
+  end
+
+  event PourCoffee extends PourCoffee 
+    where
+      @stillCoffee CofLeft ≠ 0
+    then
+      @CofLeft CofLeft ≔  CofLeft −1
+  end
+
+  event AddCof
+    any c 
+    where
+      @off Status = off
+      @cquantity c ∈ 1‥MAX_COF − CofLeft
+    then
+      @remplit CofLeft ≔ CofLeft + c
+  end
+
+  event takePot
+    where
+      @off Status = off
+      @moneyToGet Pot ≥ CoffeePrice
+    then
+      @getIt Pot ≔ CoffeePrice
+  end
+end
